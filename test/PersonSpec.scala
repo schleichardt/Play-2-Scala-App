@@ -9,11 +9,25 @@ class PersonSpec extends BaseSpec {
     "be able to get optained from the database" in {
       implicit val app = FakeApplication(additionalConfiguration = inMemoryDatabase())
       running(app) {
-        println("App is running")
         DB.withConnection { implicit c =>
           val allPersons = Person.findAll()
           allPersons.size === 1
           allPersons.head.lastName === "Schleichardt"
+        }
+      }
+    }
+  }
+
+  "person data" should {
+    "be stored in the database" in {
+      implicit val app = FakeApplication(additionalConfiguration = inMemoryDatabase())
+      running(app) {
+        DB.withConnection { implicit c =>
+          Person.findAll().size === 1
+          Person.insert(Person(NotAssigned, "Vorname", "Nachname"))
+          val personsStored = Person.findAll()
+          personsStored.size === 2
+          personsStored.find(_.lastName == "Nachname").get.firstName === "Vorname"
         }
       }
     }

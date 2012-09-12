@@ -2,7 +2,7 @@
 
 # --- !Ups
 
-insert into person values (1,'Michael', 'Schleichardt')
+insert into person(firstname, lastname) values ('Michael', 'Schleichardt')
 
 # --- !Downs
 

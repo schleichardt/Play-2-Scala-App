@@ -20,13 +20,30 @@ object Person {
     get[Pk[Long]]("id") ~
       get[String]("firstname") ~
       get[String]("lastname") map {
-      case id~firstName~lastName => Person(id, firstName, lastName)
+      case id ~ firstName ~ lastName => Person(id, firstName, lastName)
     }
   }
 
   def findAll(): Seq[Person] = {
-    DB.withConnection { implicit connection =>
-      SQL("select * from %s".format(tableName)).as(Person.simple *)
+    DB.withConnection {
+      implicit connection =>
+        SQL("select * from %s".format(tableName)).as(Person.simple *)
+    }
+  }
+
+  def insert(person: Person) = {
+    DB.withConnection {
+      implicit connection =>
+        SQL(
+          """
+          insert into %s(firstname, lastname) values (
+            {firstname}, {lastname}
+          )
+          """.format(tableName)
+        ).on(
+          'firstname -> person.firstName,
+          'lastname -> person.lastName
+        ).executeUpdate()
     }
   }
 }

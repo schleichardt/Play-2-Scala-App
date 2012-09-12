@@ -5,7 +5,7 @@
 set ignorecase true;
 
 create table person (
-  id                        bigint not null,
+  id                        bigint not null AUTO_INCREMENT,
   firstname                 varchar(255) not null,
   lastname                  varchar(255) not null,
   constraint pk_person primary key (id))
