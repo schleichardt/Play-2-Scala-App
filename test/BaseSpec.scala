@@ -10,6 +10,7 @@ abstract class BaseSpec extends Specification {
   def testWithDb(testBlock: Connection => Example): Example = {
     implicit val app = FakeApplication(additionalConfiguration = inMemoryDatabase())
     running(app) {
+      println("App is running")
       DB.withConnection { implicit c => testBlock(c) }
     }
   }
