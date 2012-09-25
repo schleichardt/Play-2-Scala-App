@@ -3,9 +3,9 @@ import play.api.{Logger, Play, GlobalSettings}
 import play.api.mvc.RequestHeader
 
 object Global extends GlobalSettings {
-  //export basicauthenabled=true
+  //-Dbasic.auth.enabled=true
   lazy val basicAuthEnabled: Boolean = {
-    val enabled = scala.util.Properties.envOrElse("basicauthenabled", false.toString).toBoolean
+    val enabled = Play.current.configuration.getBoolean("basic.auth.enabled").getOrElse(false)
     Logger.info("basic auth enabled: " + enabled)
     enabled
   }
